@@ -17,8 +17,15 @@ const pool = new Pool({
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
-  credentials: true
+  origin: [
+    'https://petits-moulins-frontend.onrender.com',
+    'https://petits-moulins-frontend.onrender.com/',
+    'http://localhost:3000',
+    'http://localhost:8080'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
