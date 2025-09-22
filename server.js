@@ -1,48 +1,38 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const { Pool } = require('pg');
-require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Database connection
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
+// IMPORTANT: Ajoutez cette ligne pour Render
+app.set('trust proxy', 1);
 
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: [
-    'https://petits-moulins-frontend.onrender.com',
-    'https://petits-moulins-frontend.onrender.com/',
-    'http://localhost:3000',
-    'http://localhost:8080'
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: true,
+  credentials: true
 }));
 app.use(express.json());
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP'
+// Test route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Les Petits Moulins API is running!',
+    timestamp: new Date().toISOString()
+  });
 });
-app.use('/api/', limiter);
 
-// Test endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  res.json({ 
+    status: 'OK', 
+    service: 'Les Petits Moulins API',
+    timestamp: new Date().toISOString() 
+  });
 });
 
-// Auth routes
+// Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/parents', require('./routes/parents'));
 app.use('/api/forms', require('./routes/forms'));
