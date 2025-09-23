@@ -258,4 +258,38 @@ router.post('/groups',
   }
 );
 
+// Routes pour enfants
+router.get('/children', authenticateAdmin, async (req, res) => {
+    // Récupérer tous les enfants avec leurs relations
+});
+
+router.post('/children', authenticateAdmin, async (req, res) => {
+    // Créer un nouvel enfant
+});
+
+router.get('/children/:id', authenticateAdmin, async (req, res) => {
+    // Récupérer un enfant spécifique
+});
+
+router.put('/children/:id', authenticateAdmin, async (req, res) => {
+    // Modifier un enfant
+});
+
+router.delete('/children/:id', authenticateAdmin, async (req, res) => {
+    // Supprimer un enfant
+});
+
+// Routes pour relations parent-enfant
+router.get('/children/:id/parents', authenticateAdmin, async (req, res) => {
+    // Récupérer les parents d'un enfant
+});
+
+router.post('/parent-children', authenticateAdmin, async (req, res) => {
+    // Créer une association parent-enfant
+});
+
+router.delete('/parent-children/:parentId/:childId', authenticateAdmin, async (req, res) => {
+    // Supprimer une association
+});
+
 module.exports = router;
